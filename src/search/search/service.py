@@ -1,7 +1,9 @@
 from abc import abstractmethod
 from typing import List
+import requests
 
 import pandas as pd
+import json
 
 from common.data_source import AbstractDataSource
 
@@ -65,14 +67,20 @@ class SimpleSearchService(BaseSearchService):
 
 
 class SearchInShardsService(SimpleSearchService):
-    def __init__(self, shards: List[SimpleSearchService]):
+    def __init__(self, shards: List[str]):
         self._shards = shards
 
-    def get_search_data(self, *args, **kwargs) -> pd.DataFrame:
+    def get_search_data(self, search_text, user_data=None, geo_data=None, limit=10) -> pd.DataFrame:
         shards_responses = []
-        for shard in self._shards:
-            shards_responses.append(shard.get_search_data(*args, **kwargs))
+        for shard_url in self._shards:
+            print(user_data)
+            print(geo_data)
+            print(str(user_data))
+            print(str(geo_data))
+            shard_url = 'http://0.0.0.0:8011/search?search_text=some_text&user_data={"age": 13,"gender": "female"}&geo_data={"region": "United States"}'
+            shard_resp = requests.get(shard_url).json()
+            shards_responses.append(pd.DataFrame.from_dict([shard_resp]))
         self._data = pd.concat(shards_responses)  # possible data race in case of multi thread/async usage
         self._data.reset_index(inplace=True, drop=True)
         assert self._data.index.is_unique
-        return super().get_search_data(*args, **kwargs)
+        return super().get_search_data(search_text, user_data=None, geo_data=None, limit=10)

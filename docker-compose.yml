@@ -7,6 +7,18 @@ services:
       context: .
     image: hw3_search:latest
 
+  user:
+    build:
+      dockerfile: docker/user_data.dockerfile
+      context: .
+    image: hw3_user:latest
+
+  geo:
+    build:
+      dockerfile: docker/geo_data.dockerfile
+      context: .
+    image: hw3_geo:latest
+
   unit_test_search:
     image: hw3_search:latest
     entrypoint: pytest --cov=src/search --cov-config=.coveragerc src/search/
@@ -20,3 +32,5 @@ services:
 #      - ./src/tests:/search_app/src/tests
     depends_on:
       - search
+      - user
+      - geo

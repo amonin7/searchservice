@@ -1,8 +1,8 @@
 import pytest
 import pandas as pd
 
-from common.data_source import AbstractDataSource
-from geo.service import GeoService
+from src.search.common.data_source import AbstractDataSource
+from src.search.geo.service import GeoService
 
 
 @pytest.fixture

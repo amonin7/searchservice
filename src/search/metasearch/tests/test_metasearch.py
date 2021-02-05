@@ -10,10 +10,11 @@ from user.service import UserService
 
 @pytest.fixture
 def metasearch():
-    user_service = UserService(CSV(USER_DATA_FILE))
-    geo_service = GeoService(CSV(GEO_DATA_FILE))
+    # user_service = UserService(CSV(USER_DATA_FILE))
+    # geo_service = GeoService(CSV(GEO_DATA_FILE))
     search = SearchInShardsService(shards=[SimpleSearchService(CSV(file)) for file in SEARCH_DOCUMENTS_DATA_FILES])
-    return MetaSearchService(search, user_service, geo_service)
+    return MetaSearchService(search)
+    # return MetaSearchService(search, user_service, geo_service)
 
 
 def test_integration_works(metasearch):
