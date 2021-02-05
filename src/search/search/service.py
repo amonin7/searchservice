@@ -72,12 +72,11 @@ class SearchInShardsService(SimpleSearchService):
 
     def get_search_data(self, search_text, user_data=None, geo_data=None, limit=10) -> pd.DataFrame:
         shards_responses = []
+        user_data = json.dumps(user_data)
+        geo_data = json.dumps(geo_data)
         for shard_url in self._shards:
-            print(user_data)
-            print(geo_data)
-            print(str(user_data))
-            print(str(geo_data))
-            shard_url = 'http://0.0.0.0:8011/search?search_text=some_text&user_data={"age": 13,"gender": "female"}&geo_data={"region": "United States"}'
+            shard_url = f'{shard_url}?search_text={search_text}&user_data={user_data}&geo_data={geo_data}'
+            # shard_url = 'http://0.0.0.0:8011/search?search_text=some_text&user_data={"age": 13,"gender": "female"}&geo_data={"region": "United States"}'
             shard_resp = requests.get(shard_url).json()
             shards_responses.append(pd.DataFrame.from_dict([shard_resp]))
         self._data = pd.concat(shards_responses)  # possible data race in case of multi thread/async usage

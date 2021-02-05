@@ -32,7 +32,7 @@ class FatherSearchServer(Flask):
         limit = int(request.args.get('limit', 10))
         sd = self._father_search.get_search_data(search_text=text, user_data=user_data, geo_data=geo_data, limit=limit)
         print(sd[self._father_search.DOCS_COLUMNS].to_dict('records'))
-        return sd[self._father_search.DOCS_COLUMNS].to_dict('records')[0]
+        return {"sd": sd[self._father_search.DOCS_COLUMNS].to_dict('records')}
 
     def run_server(self, **kwargs):
         super().run(host='0.0.0.0', **kwargs)

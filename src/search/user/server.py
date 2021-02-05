@@ -1,5 +1,6 @@
 from flask import Flask, request
-from user.service import UserService
+from src.search.user.service import UserService
+# from user.service import UserService
 # from src.search.common.data_source import CSV
 # from src.search.settings import USER_DATA_FILE
 
